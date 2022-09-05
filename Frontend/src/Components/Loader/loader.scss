@@ -1,0 +1,322 @@
+
+$base-font: 'Open Sans', sans-serif;
+$height: 26em;
+$duration: .6s;
+
+$blue: #57caf4;
+$lime: #b2ff41;
+$orange: #ff9d00;
+$yellow: #f1c40f;
+$green: #76c900;
+$navy: #0a4069;
+$cyan: #2600ff;
+$white: #00eeff;
+$gray: #444;
+$dark: darken($gray, 10);
+$red: #FF3B99;
+
+$textColor: $gray;
+
+$bezier: cubic-bezier(0.46,-0.42, 0.56, 1.37);
+
+@function goldenCalc($amount) {
+    @return ($amount * 1.618) - $amount;
+}
+
+
+
+strong
+{
+    font-weight: 700;
+}
+// p
+// {
+//     line-height: 1.5em;
+//     margin-bottom: 1em;
+//     &:last-child
+//     {
+//         margin: 0;
+//     }
+// }
+div
+{
+    position: relative;
+}
+
+// [aria-hidden="true"]
+// {
+//     position: absolute;
+//     height: 0;
+//     text-indent: -900em;
+// }
+
+$colorsList: (
+    lime: $lime,
+    red: $red,
+    orange: $orange,
+    yellow: $yellow,
+    blue: $blue,
+    cyan: $cyan,
+    green: $green,
+    gray: $gray,
+    dark: $dark,
+    white: $white
+);
+
+@each $name, $value in $colorsList
+{
+    .#{$name}
+    {
+        color: $value;
+    }
+}
+
+[type="checkbox"]
+{
+    display: none;
+    &:checked.valuenow-90 ~ .chart-container .svg-loader [aria-valuenow]
+    {
+            stroke-dashoffset: 50;
+    }
+    &:checked.valuenow-66 ~ .chart-container .svg-loader [aria-valuenow]
+    {
+            stroke-dashoffset: 170;
+    }
+    &:checked.valuenow-33 ~ .chart-container .svg-loader [aria-valuenow]
+    {
+            stroke-dashoffset: 335;
+    }
+    &:checked[class^="valuenow-"] ~ .info label
+    {
+        opacity: .4;
+    }
+}
+
+.header
+{
+    padding-top: 4em;
+    .svg-loader
+    {
+        transform: scale(1.4);
+    }
+}
+
+article
+{
+    display: flex;
+    flex-direction: row-reverse;
+    width: 40em;
+    height: goldenCalc(40em);
+    box-sizing: border-box;
+    margin: 4em auto;
+    padding: 3em;
+    background-size: 200% 100%;
+    background-position: 70% top;
+    border-radius: .4em;
+    // box-shadow  :
+    //             0 1.7em 5.5em -.94em rgba($dark, 0.3),
+    //             0 2em 3em .5em rgba($dark, 0.1),
+    //             0 1.8em 2em -1.5em rgba($dark, 0.2);
+    .info
+    {
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: $white;
+        perspective: 900px;
+        flex: 0 1 14em;
+        padding-left: 2em;
+        label
+        {
+            transform-style: preserve-3d;
+            text-align: center;
+            opacity: 1;
+            color: $white;
+            border: 1px solid $white;
+            padding: 1.2em 1em;
+            margin-top: 1em;
+            border-radius: .2em;
+            transition: opacity .2s ease-in-out;
+        }
+    }
+    header
+    {
+        margin-bottom: 1.5em;
+        padding-bottom: 1.5em;
+        border-bottom: 1px dashed rgba($white, .8);
+        h3 {
+            font-size: 1.65em;
+        }
+    }
+    @media screen and (max-width: 480px) {
+        width: 90vw;
+        height: auto;
+        padding: 2.2em 2em;
+        margin: 4em auto;
+        align-items: center;
+        flex-direction: column-reverse;
+        .mobile-hide
+        {
+            display: none;
+        }
+        .info
+        {
+            // text-align: inherit;
+            flex: auto;
+            padding: 0;
+            margin: 3em 0 0;
+            label
+            {
+                margin-top: 2em;
+            }
+        }
+    }
+}
+
+.svg-loader
+{
+    position: relative;
+    &_grow
+    {
+        stroke-miterlimit: 10;
+        stroke-dasharray: 500;
+        stroke-dashoffset: -500;
+        stroke-linejoin: round;
+        stroke-linecap: round;
+        @for $i from 0 to 101
+        {
+            &[aria-valuenow="#{$i}"]
+            {
+                stroke-dashoffset: 500 - ((500 * $i) / 100);
+            }
+        }
+    }
+    &_animate
+    {
+        animation: goBackGrow 20s $bezier infinite;
+    }
+    &_animate-color
+    {
+        animation: goBackColorGrow 4s ease-in-out infinite;
+        &.reflect-x
+        {
+            animation-name: backGoGrow;
+            animation-delay: .1s;
+        }
+    }
+}
+
+.logo
+{
+    fill: none;
+    stroke: rgba($white, .6);
+    stroke-miterlimit: 10;
+    stroke-dasharray: 900;
+    stroke-dashoffset: 200;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    transform: scale(.4);
+    transform-origin: 50% 50%;
+    animation: backGoLogo 40s ease-in-out infinite;
+}
+
+@keyframes backGoLogo
+{
+    5%
+    {
+        stroke-dashoffset: 900;
+    }
+    20%,
+    100%
+    {
+        stroke-dashoffset: 200;
+    }
+}
+circle
+{
+    stroke-width: 6;
+
+    transition: all 1s ease-in-out;
+    position: relative;
+    &.fat
+    {
+        stroke-width: 8;
+    }
+    &.thin
+    {
+        stroke-width: 2;
+    }
+    &.hair-line
+    {
+        stroke-width: 1;
+    }
+    @each $name, $value in $colorsList
+    {
+        &.#{$name}
+        {
+            stroke: $value;
+        }
+    }
+}
+
+@keyframes backGoGrow
+{
+    0%
+    {
+        stroke-dashoffset: 20;
+    }
+    50%
+    {
+        stroke-dashoffset: 480;
+    }
+    100%
+    {
+        stroke-dashoffset: 20;
+    }
+}
+
+@keyframes goBackColorGrow
+{
+    0%
+    {
+        stroke-dashoffset: 480;
+        stroke: $red;
+    }
+    50%
+    {
+        stroke-dashoffset: 20;
+        stroke: $cyan;
+    }
+    100%
+    {
+        stroke-dashoffset: 480;
+        stroke: $red;
+    }
+}
+
+
+@keyframes goBackGrow
+{
+    0%
+    {
+        stroke-dashoffset: 480;
+    }
+    25%
+    {
+        stroke-dashoffset: 400;
+    }
+    50%
+    {
+        stroke-dashoffset: 50;
+    }
+    75%
+    {
+        stroke-dashoffset: 200;
+    }
+    100%
+    {
+        stroke-dashoffset: 480;
+    }
+}
+
